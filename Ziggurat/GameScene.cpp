@@ -34,6 +34,16 @@ void GameScene::UpdateScene()
 void GameScene::HandleGUIEvents(EventReceiver::GUIEvent& guiEvent)
 {
 	s32 id = guiEvent.id;
+
+	switch (id)
+	{
+	case GUIElements::INSERT_WND:
+		if (guiEvent.type == gui::EGUI_EVENT_TYPE::EGET_ELEMENT_CLOSED)
+			GUI->CloseInsertWindow();
+		break;
+	default:
+		break;
+	}
 }
 
 gui::IGUIEnvironment* GameScene::GetGUIEnvironment() const
@@ -45,11 +55,30 @@ void GameScene::DrawScene()
 {
 	wm->driver->beginScene(true, true, video::SColor(255, 113, 113, 133));
 
+	DrawFloor();
+
 	wm->smgr->drawAll();
 
 	wm->device->getGUIEnvironment()->drawAll();
 
 	wm->driver->endScene();
+}
+
+void GameScene::DrawFloor()
+{
+	const vector3df& origin = activeCam->Position();
+
+	float dist = 10.f;
+	int x0 = (int)(origin.X / dist) * dist;
+	int z0 = (int)(origin.Z / dist) * dist;
+	int num = 100;
+	video::SColor col = video::SColor::SColor(0, 255, 255, 255);
+
+	for (int i = -num; i <= num; ++i)
+	{
+		wm->driver->draw3DLine(vector3df(i * dist + x0, 0, -num * dist + z0), vector3df(i * dist + x0, 0, num * dist + z0), video::SColor::SColor(0, 255, 255, 255));
+		wm->driver->draw3DLine(vector3df(-num * dist + x0, 0, i * dist + z0), vector3df(num * dist + x0, 0, i * dist + z0), col);
+	}
 }
 
 void GameScene::ShowDiagnostics(const wchar_t* text)

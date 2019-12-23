@@ -43,6 +43,7 @@ public:
 	gui::IGUIEnvironment* GetGUIEnvironment() const;
 
 	void DrawScene();
+	void DrawFloor();
 	void ShowDiagnostics(const wchar_t* text);
 	
 	void AddCamera(const vector3df& pos, const vector3df& lookat);

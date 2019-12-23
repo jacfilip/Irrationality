@@ -53,10 +53,12 @@ void WorkManager::AlterWorkState(WorkState st)
 	{
 	case FREE_CAMERA_FLOW:
 		LockCursor(true);
+		scenes[activeScene]->GUI->CloseInsertWindow();
 		break;
 	case CAMERA_FROZEN:
 		LockCursor(false);
 		scenes[activeScene]->GUI->SetCrosshair(Crosshairs::CROSS);
+		scenes[activeScene]->GUI->PopInsertWindow();
 		break;
 	default:
 		break;
@@ -75,17 +77,15 @@ void WorkManager::ProcessEvents()
 	{
 	case WorkState::FREE_CAMERA_FLOW:
 		scenes[activeScene]->MoveCamera();
-		if (scenes.size() > 0)
-		{
-			scenes[activeScene]->UpdateScene();
-			scenes[activeScene]->DrawScene();
-		}
+		scenes[activeScene]->UpdateScene();
+		scenes[activeScene]->DrawScene();
 		if (eventReceiver->IsKeyPressed(KEY_TAB))
 			AlterWorkState(WorkState::CAMERA_FROZEN);
 		break;
 	case WorkState::CAMERA_FROZEN:
 		if (eventReceiver->IsKeyPressed(KEY_TAB))
 			AlterWorkState(WorkState::FREE_CAMERA_FLOW);
+		scenes[activeScene]->DrawScene();
 		break;
 	default:
 		break;

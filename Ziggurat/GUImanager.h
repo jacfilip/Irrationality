@@ -7,6 +7,11 @@ using namespace gui;
 
 extern class GameScene;
 
+enum GUIElements
+{
+	INSERT_WND = 1,
+};
+
 enum Crosshairs
 {
 	NONE,
@@ -22,9 +27,13 @@ private:
 
 	Crosshairs crosshairType;
 
+	IGUIWindow* insertWindow;
+
 public:
 	GUImanager(GameScene* gs);
 
 	void SetCrosshair(Crosshairs type);
+	void PopInsertWindow();
+	void CloseInsertWindow();
 };
 

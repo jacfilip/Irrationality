@@ -25,3 +25,17 @@ void GUImanager::SetCrosshair(Crosshairs type)
 			break;
 	}
 }
+
+void GUImanager::PopInsertWindow()
+{
+	this->insertWindow = scene->GetGUIEnvironment()->addWindow(core::recti(10, 10, 110, 260), false, L"Insert", nullptr, GUIElements::INSERT_WND);
+}
+
+void GUImanager::CloseInsertWindow()
+{
+	if (insertWindow != nullptr)
+	{
+		this->insertWindow->remove();
+		this->insertWindow = nullptr;
+	}
+}
