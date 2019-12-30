@@ -7,22 +7,25 @@
 
 extern class CameraObject;
 extern class Model3D;
-extern enum ModelType;
+extern enum ObjectType;
 
 GameScene::GameScene(WorkManager* wm)
 	: wm(wm)
-{
+{	
 	//cam = wm->smgr->addCameraSceneNode(nullptr, core::vector3df(), core::vector3df(0, 0, 100));
 	AddCamera(core::vector3df(), core::vector3df(0, 10, 0));
-	AddCube(vector3df(0, 0, 0));
-	diagnosticFont = wm->smgr->getGUIEnvironment()->getFont("fixedsys.bmp");
+	diagnosticFont = wm->smgr->getGUIEnvironment()->getFont("fonts//fixedsys10.bmp");
 	if (!diagnosticFont)
 		throw new exception("Font not found.");
 	this->guiEnv = wm->smgr->getGUIEnvironment();
 	this->guiEnv->getSkin()->setFont(diagnosticFont);
 	this->wm->device->getCursorControl()->setActiveIcon(gui::ECURSOR_ICON::ECI_CROSS);
 	this->GUI = new GUImanager(this);
+	this->objFactory = new ObjectFactory(wm);
+
 	camPosCaption = wm->smgr->getGUIEnvironment()->addStaticText(L"", core::recti(0, 0, 1000, 800));
+	
+	std::cout << "Scene initialized." << std::endl;
 }
 
 void GameScene::UpdateScene()
@@ -39,7 +42,7 @@ void GameScene::HandleGUIEvents(EventReceiver::GUIEvent& guiEvent)
 	{
 	case GUIElements::INSERT_WND:
 		if (guiEvent.type == gui::EGUI_EVENT_TYPE::EGET_ELEMENT_CLOSED)
-			GUI->CloseInsertWindow();
+			GUI->CloseToolboxWindow();
 		break;
 	default:
 		break;
@@ -54,7 +57,9 @@ gui::IGUIEnvironment* GameScene::GetGUIEnvironment() const
 void GameScene::DrawScene()
 {
 	wm->driver->beginScene(true, true, video::SColor(255, 113, 113, 133));
-
+	
+	wm->smgr->setAmbientLight(video::SColor(255, 100, 0, 100));
+	
 	DrawFloor();
 
 	wm->smgr->drawAll();
@@ -71,12 +76,12 @@ void GameScene::DrawFloor()
 	float dist = 10.f;
 	int x0 = (int)(origin.X / dist) * dist;
 	int z0 = (int)(origin.Z / dist) * dist;
-	int num = 100;
-	video::SColor col = video::SColor::SColor(0, 255, 255, 255);
-
+	int num = 50;
+	video::SColor col = video::SColor(0, 255, 255, 255);
+	
 	for (int i = -num; i <= num; ++i)
 	{
-		wm->driver->draw3DLine(vector3df(i * dist + x0, 0, -num * dist + z0), vector3df(i * dist + x0, 0, num * dist + z0), video::SColor::SColor(0, 255, 255, 255));
+		wm->driver->draw3DLine(vector3df(i * dist + x0, 0, -num * dist + z0), vector3df(i * dist + x0, 0, num * dist + z0), col);
 		wm->driver->draw3DLine(vector3df(-num * dist + x0, 0, i * dist + z0), vector3df(num * dist + x0, 0, i * dist + z0), col);
 	}
 }
@@ -90,15 +95,6 @@ void GameScene::AddCamera(const vector3df& pos, const vector3df& lookat)
 {
 	activeCam = new CameraObject(wm->smgr->addCameraSceneNode(nullptr, pos, lookat), L"Main Camera", this);
 	objects.push_back(activeCam);
-}
-
-Model3D* GameScene::AddCube(vector3df pos, vector3df rot, float size)
-{
-	scene::ISceneNode* cube = wm->smgr->addCubeSceneNode(10, nullptr, 0, pos);
-	objects.push_back(new Model3D(cube, L"Cube", this, pos, rot, vector3df(1,1,1) * size, ModelType::CUBE));
-	wm->smgr->addLightSceneNode(nullptr, vector3df(0, -150, -150), video::SColorf(0, 1, 0), 300.f);
-
-	return (Model3D*)objects.back();
 }
 
 EventReceiver* GameScene::GetEventReceiver()
@@ -143,18 +139,10 @@ void GameScene::MoveCamera()
 		+ L"Y: " + std::to_wstring(activeCam->Position().Y) + L" "
 		+ L"Z: " + std::to_wstring(activeCam->Position().Z) + L"}\n";
 
-	wstring camTar = L"Target: {X: " + std::to_wstring(activeCam->Target().X) + L", "
-		+ L"Y: " + std::to_wstring(activeCam->Target().Y) + L" "
-		+ L"Z: " + std::to_wstring(activeCam->Target().Z) + L"}\n";
-
 	wstring camRot = L"Rot: {X: " + std::to_wstring(activeCam->Rotation().X) + L", "
 		+ L"Y: " + std::to_wstring(activeCam->Rotation().Y) + L" "
 		+ L"Z: " + std::to_wstring(activeCam->Rotation().Z) + L"}\n";
 
-	wstring camFor = L"Forward: {X: " + std::to_wstring(activeCam->GetForwardVector().getSphericalCoordinateAngles().X) + L", "
-		+ L"Y: " + std::to_wstring(activeCam->GetForwardVector().getSphericalCoordinateAngles().Y) + L" "
-		+ L"Z: " + std::to_wstring(activeCam->GetForwardVector().getSphericalCoordinateAngles().Z) + L"}\n";
-
-	ShowDiagnostics((camPos + camRot + camTar + camFor).c_str());
+	ShowDiagnostics((camPos + camRot).c_str());
 }
 

@@ -161,6 +161,7 @@
     <ClCompile Include="GUImanager.cpp" />
     <ClCompile Include="Model3D.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="ObjectFactory.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="WorkManager.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="GUImanager.h" />
     <ClInclude Include="Model3D.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="ObjectFactory.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="WorkManager.h" />

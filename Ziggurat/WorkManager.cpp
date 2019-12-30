@@ -19,8 +19,10 @@ WorkManager::WorkManager(IrrlichtDevice* device, video::IVideoDriver* driver, sc
 	this->eventReceiver->mouseState.position =
 		this->eventReceiver->mouseState.prevPosition = core::position2di(WindowResolution.X / 2, WindowResolution.Y / 2);
 
-	CreateNewSecne();
+	CreateNewScene();
 	activeScene = 0;
+
+	scenes[activeScene]->objFactory->AddCube(vector3df(0, 0, 0));
 }
 
 void WorkManager::Run()
@@ -53,12 +55,12 @@ void WorkManager::AlterWorkState(WorkState st)
 	{
 	case FREE_CAMERA_FLOW:
 		LockCursor(true);
-		scenes[activeScene]->GUI->CloseInsertWindow();
+		scenes[activeScene]->GUI->CloseToolboxWindow();
 		break;
 	case CAMERA_FROZEN:
 		LockCursor(false);
 		scenes[activeScene]->GUI->SetCrosshair(Crosshairs::CROSS);
-		scenes[activeScene]->GUI->PopInsertWindow();
+		scenes[activeScene]->GUI->PopToolboxWindow();
 		break;
 	default:
 		break;
@@ -95,8 +97,13 @@ void WorkManager::ProcessEvents()
 		scenes[activeScene]->HandleGUIEvents(this->eventReceiver->guiEvent);
 }
 
-void WorkManager::CreateNewSecne()
+void WorkManager::CreateNewScene()
 {
 	scenes.push_back(new GameScene(this));
 	LockCursor(true);
+}
+
+GameScene* WorkManager::GetActiveScene()
+{
+	return scenes[activeScene];
 }

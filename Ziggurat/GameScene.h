@@ -8,6 +8,7 @@
 #include "CameraObject.h"
 #include "Model3D.h"
 #include "EventReceiver.h"
+#include "ObjectFactory.h"
 
 using namespace irr;
 using irr::core::vector3df;
@@ -36,6 +37,8 @@ private:
 public:
 	GUImanager* GUI;
 
+	ObjectFactory* objFactory;
+
 	GameScene(WorkManager* wm);
 
 	void UpdateScene();
@@ -47,7 +50,6 @@ public:
 	void ShowDiagnostics(const wchar_t* text);
 	
 	void AddCamera(const vector3df& pos, const vector3df& lookat);
-	Model3D* AddCube(vector3df pos, vector3df rot = vector3df(0, 0, 0), float size = 1.0f);
 
 	EventReceiver* GetEventReceiver();
 	WorkManager* GetWorkManager();

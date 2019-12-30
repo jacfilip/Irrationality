@@ -33,7 +33,10 @@ public:
 	GUImanager(GameScene* gs);
 
 	void SetCrosshair(Crosshairs type);
-	void PopInsertWindow();
-	void CloseInsertWindow();
+	
+	void PopToolboxWindow();
+	void PopInfoBox(const wchar_t* message);
+	
+	void CloseToolboxWindow();
 };
 

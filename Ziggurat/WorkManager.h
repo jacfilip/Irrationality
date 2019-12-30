@@ -43,7 +43,7 @@ public:
 	void AlterWorkState(WorkState st);
 	void LockCursor(bool lock);
 
-	void CreateNewSecne();
-	 
+	void CreateNewScene();
+	GameScene* GetActiveScene();
 };
 

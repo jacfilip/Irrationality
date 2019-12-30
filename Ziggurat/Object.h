@@ -1,6 +1,7 @@
 #pragma once
 #include <irrlicht.h>
 #include <string>
+#include "ObjectFactory.h"
 
 class WorkManager;
 class GameScene;

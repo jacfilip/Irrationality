@@ -11,9 +11,11 @@ using namespace irr;
 
 #define FULLHD_WIDE 2560, 1080
 #define WINDOWED_MODE 640, 480
-#define FULLSCREEN false
+#define FULLSCREEN true
 
-core::vector2di WindowResolution(WINDOWED_MODE);
+typedef const wchar_t* raw_str;
+
+core::vector2di WindowResolution(FULLHD_WIDE);
 
 int main()
 {
