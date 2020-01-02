@@ -35,8 +35,11 @@ Object* ObjectFactory::AddCube(vector3df pos, vector3df rot, float size, const w
 	}
 
 	scene::ISceneNode* cube = wm->smgr->addCubeSceneNode(10, nullptr, 0, pos);
-	cube->getMaterial(0).DiffuseColor.set(255, 255, 0, 0);
-	cube->setMaterialFlag(video::E_MATERIAL_FLAG::EMF_LIGHTING, false);
+	cube->getMaterial(0).DiffuseColor.set(255, 255, 255, 255);
+	cube->getMaterial(0).MaterialType = video::EMT_SOLID_2_LAYER;
+	cube->setMaterialFlag(video::E_MATERIAL_FLAG::EMF_LIGHTING, true);
+	cube->setMaterialType(video::E_MATERIAL_TYPE::EMT_SOLID);
+	cube->getMaterial(0).BackfaceCulling = false;
 	objectCounter[ObjectType::CUBE] = objectCounter[ObjectType::CUBE] + 1;
 
 	objectsDict.insert(namestr, new Model3D(cube, namestr.c_str(), wm->GetActiveScene(), pos, rot, core::vector3df(1, 1, 1) * size, ObjectType::CUBE));

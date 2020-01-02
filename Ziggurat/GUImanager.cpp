@@ -2,6 +2,8 @@
 #include "GameScene.h"
 #include "WorkManager.h"
 
+extern core::vector2di WindowResolution;
+
 GUImanager::GUImanager(GameScene* gs)
 {
 	this->crosshairType = Crosshairs::NONE;
@@ -37,7 +39,7 @@ void GUImanager::SetCrosshair(Crosshairs type)
 
 void GUImanager::PopToolboxWindow()
 {
-	this->insertWindow = scene->GetGUIEnvironment()->addWindow(core::recti(10, 10, 110, 260), false, L"Toolbox", nullptr, GUIElements::INSERT_WND);
+	this->toolboxWindow = scene->GetGUIEnvironment()->addWindow(core::recti(10, 20, 175, 0.9 * WindowResolution.Y), false, L"Toolbox", nullptr, GUIElements::INSERT_WND);
 }
 
 void GUImanager::PopInfoBox(const wchar_t* message)
@@ -47,9 +49,9 @@ void GUImanager::PopInfoBox(const wchar_t* message)
 
 void GUImanager::CloseToolboxWindow()
 {
-	if (insertWindow != nullptr)
+	if (toolboxWindow != nullptr)
 	{
-		this->insertWindow->remove();
-		this->insertWindow = nullptr;
+		this->toolboxWindow->remove();
+		this->toolboxWindow = nullptr;
 	}
 }

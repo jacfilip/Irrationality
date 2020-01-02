@@ -16,8 +16,6 @@ private:
 	IrrlichtDevice* dev;
 
 public:
-	IGUISpriteBank* sprites;
-
 	ResourceManager(WorkManager* wm, scene::ISceneManager* scene, video::IVideoDriver* driver, IrrlichtDevice* dev);
 };
 

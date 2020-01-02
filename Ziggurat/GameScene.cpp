@@ -12,7 +12,6 @@ extern enum ObjectType;
 GameScene::GameScene(WorkManager* wm)
 	: wm(wm)
 {	
-	//cam = wm->smgr->addCameraSceneNode(nullptr, core::vector3df(), core::vector3df(0, 0, 100));
 	AddCamera(core::vector3df(), core::vector3df(0, 10, 0));
 	diagnosticFont = wm->smgr->getGUIEnvironment()->getFont("fonts//fixedsys10.bmp");
 	if (!diagnosticFont)
@@ -22,6 +21,8 @@ GameScene::GameScene(WorkManager* wm)
 	this->wm->device->getCursorControl()->setActiveIcon(gui::ECURSOR_ICON::ECI_CROSS);
 	this->GUI = new GUImanager(this);
 	this->objFactory = new ObjectFactory(wm);
+	this->selectedObject = nullptr;
+	this->colman = wm->smgr->getSceneCollisionManager();
 
 	camPosCaption = wm->smgr->getGUIEnvironment()->addStaticText(L"", core::recti(0, 0, 1000, 800));
 	
@@ -58,7 +59,7 @@ void GameScene::DrawScene()
 {
 	wm->driver->beginScene(true, true, video::SColor(255, 113, 113, 133));
 	
-	wm->smgr->setAmbientLight(video::SColor(255, 100, 0, 100));
+	wm->smgr->setAmbientLight(video::SColor(0, 200, 200, 200));
 	
 	DrawFloor();
 
@@ -77,7 +78,11 @@ void GameScene::DrawFloor()
 	int x0 = (int)(origin.X / dist) * dist;
 	int z0 = (int)(origin.Z / dist) * dist;
 	int num = 50;
-	video::SColor col = video::SColor(0, 255, 255, 255);
+	video::SColor col = video::SColor(0, 155, 0, 0);
+	video::SMaterial mat;
+	mat.MaterialType = video::E_MATERIAL_TYPE::EMT_SOLID;
+	
+	wm->driver->setMaterial(mat);
 	
 	for (int i = -num; i <= num; ++i)
 	{
@@ -145,4 +150,48 @@ void GameScene::MoveCamera()
 
 	ShowDiagnostics((camPos + camRot).c_str());
 }
+
+scene::ISceneCollisionManager* GameScene::GetCollisionManager() const
+{
+	return colman;
+}
+
+Object* GameScene::GetObjectByNode(scene::ISceneNode* node) const
+{
+	for (Object* obj : objects)
+		if (obj->node == node)
+			return obj;
+	return nullptr;
+}
+
+void GameScene::SelectObject(Object* obj)
+{
+	if (!obj)
+		return;
+
+	if (selectedObject)
+		DeselectObject();
+
+	selectedObject = obj;
+	selectedObject->isSelected = true;
+
+	obj->node->getMaterial(0).AmbientColor = video::SColor(100, 220, 50, 220);
+}
+
+void GameScene::SelectObject(scene::ISceneNode* node)
+{
+	SelectObject(GetObjectByNode(node));
+}
+
+void GameScene::DeselectObject()
+{
+	if (selectedObject)
+	{
+		selectedObject->node->getMaterial(0).AmbientColor = video::SColor(255, 255, 255, 255);
+		selectedObject->isSelected = false;
+	}
+
+	selectedObject = nullptr;
+}
+
 

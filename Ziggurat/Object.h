@@ -14,22 +14,38 @@ using scene::ISceneNode;
 
 using std::wstring;
 
+enum HitType
+{
+	ID_NOT_PICKABLE = 0,
+	ID_PICKABLE = 1,
+	ID_HIGHLIGHTABLE = 1 << 1,
+};
+
 class Object
 {
 protected:
-	scene::ISceneNode* node;
 	wstring name;
 	GameScene* scene;
 	EventReceiver* event;
 
+	HitType hitType;
+	scene::ITriangleSelector* selector;
+
 public:
-	Object(ISceneNode* node, const wchar_t* name, GameScene* scene);
+	scene::ISceneNode* node;
+
+	bool isSelected;
+
+	Object(ISceneNode* node, const wchar_t* name, GameScene* scene, HitType hit = ID_PICKABLE);
 
 	vector3df Position() { return node->getPosition(); }
 	vector3df Rotation() { return node->getRotation(); }
 
 	virtual void Translate(const vector3df& v);
 	virtual void Rotate(const vector3df& v);
+
+	virtual void ApplyTexture(const wchar_t* path, int layer);
+	virtual video::ITexture* GetDefaultTexture();
 
 	virtual void Update() = 0;
 };

@@ -27,7 +27,7 @@ private:
 
 	Crosshairs crosshairType;
 
-	IGUIWindow* insertWindow;
+	IGUIWindow* toolboxWindow;
 
 public:
 	GUImanager(GameScene* gs);

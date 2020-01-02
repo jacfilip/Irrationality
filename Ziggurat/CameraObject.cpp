@@ -2,7 +2,7 @@
 #include "WorkManager.h"
 
 CameraObject::CameraObject(scene::ICameraSceneNode* camera, const wchar_t* name, GameScene* scene)
-	: Object(camera, name, scene), cameraNode(camera)
+	: Object(camera, name, scene, ID_NOT_PICKABLE), cameraNode(camera)
 {
 	camera->bindTargetAndRotation(true);
 	this->cameraNode->setPosition(vector3df(0, 0, -50));
@@ -16,8 +16,22 @@ CameraObject::CameraObject(scene::ICameraSceneNode* camera, const wchar_t* name,
 
 void CameraObject::Update()
 {
-	if (this->event->IsKeyDown(EKEY_CODE::KEY_F1))
-		this->scene->GetGUIEnvironment()->addCheckBox(true, core::recti(500, 500, 2000, 1000));
+	if (scene->GetEventReceiver()->mouseState.LeftButtonDown)
+	{
+		core::line3df ray = this->scene->GetCollisionManager()->getRayFromScreenCoordinates(this->scene->GetEventReceiver()->mouseState.position, cameraNode);
+		
+		core::vector3df intersection;
+		core::triangle3df hitTriangle;
+
+		//Move 'selected' to GameScene
+		scene::ISceneNode* selected = scene->GetCollisionManager()->
+			getSceneNodeAndCollisionPointFromRay(ray, intersection, hitTriangle, HitType::ID_PICKABLE);
+
+		if (selected)
+		{
+			scene->SelectObject(selected);
+		}
+	}
 }
 
 void CameraObject::Translate(const vector3df& v)

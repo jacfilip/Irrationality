@@ -22,14 +22,16 @@ WorkManager::WorkManager(IrrlichtDevice* device, video::IVideoDriver* driver, sc
 	CreateNewScene();
 	activeScene = 0;
 
-	scenes[activeScene]->objFactory->AddCube(vector3df(0, 0, 0));
+	scenes[activeScene]->objFactory->AddCube(vector3df(0, 0, 0))->ApplyTexture(L"arz.jpg", 0);
+	scenes[activeScene]->objFactory->AddCube(vector3df(20, 0, 0))->ApplyTexture(L"arz.jpg", 0);
 }
 
 void WorkManager::Run()
 {
 	while (device->run())
 	{
-		if (eventReceiver->IsKeyPressed(EKEY_CODE::KEY_ESCAPE))
+		//Quit app
+		if (eventReceiver->IsKeyDown(EKEY_CODE::KEY_LCONTROL) && eventReceiver->IsKeyPressed(EKEY_CODE::KEY_KEY_Q))
 			device->closeDevice();
 		
 		ProcessEvents();
@@ -57,7 +59,7 @@ void WorkManager::AlterWorkState(WorkState st)
 		LockCursor(true);
 		scenes[activeScene]->GUI->CloseToolboxWindow();
 		break;
-	case CAMERA_FROZEN:
+	case GUI_MODE:
 		LockCursor(false);
 		scenes[activeScene]->GUI->SetCrosshair(Crosshairs::CROSS);
 		scenes[activeScene]->GUI->PopToolboxWindow();
@@ -81,10 +83,14 @@ void WorkManager::ProcessEvents()
 		scenes[activeScene]->MoveCamera();
 		scenes[activeScene]->UpdateScene();
 		scenes[activeScene]->DrawScene();
+
 		if (eventReceiver->IsKeyPressed(KEY_TAB))
-			AlterWorkState(WorkState::CAMERA_FROZEN);
+			AlterWorkState(WorkState::GUI_MODE);
+		else if (eventReceiver->IsKeyPressed(EKEY_CODE::KEY_ESCAPE))
+			scenes[activeScene]->DeselectObject();
+	
 		break;
-	case WorkState::CAMERA_FROZEN:
+	case WorkState::GUI_MODE:
 		if (eventReceiver->IsKeyPressed(KEY_TAB))
 			AlterWorkState(WorkState::FREE_CAMERA_FLOW);
 		scenes[activeScene]->DrawScene();

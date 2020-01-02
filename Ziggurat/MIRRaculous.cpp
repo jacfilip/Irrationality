@@ -11,11 +11,11 @@ using namespace irr;
 
 #define FULLHD_WIDE 2560, 1080
 #define WINDOWED_MODE 640, 480
-#define FULLSCREEN true
+#define FULLSCREEN false
 
 typedef const wchar_t* raw_str;
 
-core::vector2di WindowResolution(FULLHD_WIDE);
+core::vector2di WindowResolution(WINDOWED_MODE);
 
 int main()
 {
@@ -23,7 +23,7 @@ int main()
 	
 	IrrlichtDevice* dev = createDevice(video::EDT_OPENGL, core::dimension2d<u32>(WindowResolution.X, WindowResolution.Y), 32, FULLSCREEN, false,false, &receiver);
 	
-	if (dev == 0)
+	if (!dev)
 		return 1; // could not create driver.
 	
 	video::IVideoDriver* driver = dev->getVideoDriver();

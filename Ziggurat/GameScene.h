@@ -27,17 +27,20 @@ private:
 	WorkManager* wm;
 	CameraObject* activeCam;
 
-	std::vector<Object*> objects;
-
 	gui::IGUIStaticText* camPosCaption;
 	gui::IGUIFont* diagnosticFont;
 
 	gui::IGUIEnvironment* guiEnv;
 
+	scene::ISceneCollisionManager* colman;
+
 public:
 	GUImanager* GUI;
 
+	std::vector<Object*> objects;
 	ObjectFactory* objFactory;
+
+	Object* selectedObject;
 
 	GameScene(WorkManager* wm);
 
@@ -55,5 +58,12 @@ public:
 	WorkManager* GetWorkManager();
 
 	void MoveCamera();
+
+	scene::ISceneCollisionManager* GetCollisionManager() const;
+	Object* GetObjectByNode(scene::ISceneNode* node) const;
+
+	void SelectObject(Object* obj);
+	void SelectObject(scene::ISceneNode* node);
+	void DeselectObject();
 };
 

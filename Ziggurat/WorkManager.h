@@ -16,7 +16,7 @@ extern class GameScene;
 enum WorkState
 {
 	FREE_CAMERA_FLOW = 0,
-	CAMERA_FROZEN = 1
+	GUI_MODE = 1
 };
 
 class WorkManager
