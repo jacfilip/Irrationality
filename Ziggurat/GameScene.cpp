@@ -23,16 +23,24 @@ GameScene::GameScene(WorkManager* wm)
 	this->objFactory = new ObjectFactory(wm);
 	this->selectedObject = nullptr;
 	this->colman = wm->smgr->getSceneCollisionManager();
+	this->gridSnap = 0;
+	this->lastSceneUpdate = 0;
+	this->deltaTime = 0;
 
 	camPosCaption = wm->smgr->getGUIEnvironment()->addStaticText(L"", core::recti(0, 0, 1000, 800));
 	
 	std::cout << "Scene initialized." << std::endl;
 }
 
-void GameScene::UpdateScene()
+void GameScene::UpdateScene(u32 time)
 {
-	for(Object* obj : objects)
-		obj->Update();
+	deltaTime = time - lastSceneUpdate;
+
+	for (Object* obj : objects)
+		obj->Update(deltaTime);
+
+	lastSceneUpdate = time;
+
 }
 
 void GameScene::HandleGUIEvents(EventReceiver::GUIEvent& guiEvent)
@@ -44,6 +52,24 @@ void GameScene::HandleGUIEvents(EventReceiver::GUIEvent& guiEvent)
 	case GUIElements::INSERT_WND:
 		if (guiEvent.type == gui::EGUI_EVENT_TYPE::EGET_ELEMENT_CLOSED)
 			GUI->CloseToolboxWindow();
+		break;
+	case GUIElements::OBJ_PROPERTY_BOX_POS_X:
+		if (guiEvent.type == gui::EGUI_EVENT_TYPE::EGET_SPINBOX_CHANGED)
+		{
+
+		}
+		break;
+	case GUIElements::OBJ_PROPERTY_BOX_POS_Y:
+		if (guiEvent.type == gui::EGUI_EVENT_TYPE::EGET_SPINBOX_CHANGED)
+		{
+
+		}
+		break;
+	case GUIElements::OBJ_PROPERTY_BOX_POS_Z:
+		if (guiEvent.type == gui::EGUI_EVENT_TYPE::EGET_SPINBOX_CHANGED)
+		{
+
+		}
 		break;
 	default:
 		break;
@@ -57,7 +83,7 @@ gui::IGUIEnvironment* GameScene::GetGUIEnvironment() const
 
 void GameScene::DrawScene()
 {
-	wm->driver->beginScene(true, true, video::SColor(255, 113, 113, 133));
+	wm->driver->beginScene(true, true, video::SColor(255, 50, 50, 50));
 	
 	wm->smgr->setAmbientLight(video::SColor(0, 200, 200, 200));
 	
@@ -72,16 +98,18 @@ void GameScene::DrawScene()
 
 void GameScene::DrawFloor()
 {
-	const vector3df& origin = activeCam->Position();
+	wm->driver->setTransform(video::E_TRANSFORMATION_STATE::ETS_WORLD, core::IdentityMatrix);
 
+	const vector3df& origin = activeCam->Position();
+	
 	float dist = 10.f;
 	int x0 = (int)(origin.X / dist) * dist;
 	int z0 = (int)(origin.Z / dist) * dist;
 	int num = 50;
-	video::SColor col = video::SColor(0, 155, 0, 0);
+	video::SColor col = video::SColor(255, 180, 180, 180);
 	video::SMaterial mat;
 	mat.MaterialType = video::E_MATERIAL_TYPE::EMT_SOLID;
-	
+	mat.AmbientColor = col;
 	wm->driver->setMaterial(mat);
 	
 	for (int i = -num; i <= num; ++i)
@@ -117,19 +145,19 @@ void GameScene::MoveCamera()
 	const float camSpeed = 0.1f;
 	const float camRotSpeed = 0.03f;
 
-	if (wm->eventReceiver->IsKeyDown(KEY_KEY_W))
+	if (wm->eventReceiver->IsKeyDown(KeyMap.CAMERA_FORWARD))
 		activeCam->Translate(activeCam->cameraNode->getRotation().rotationToDirection().normalize() * camSpeed);
-	else if (wm->eventReceiver->IsKeyDown(KEY_KEY_S))
+	else if (wm->eventReceiver->IsKeyDown(KeyMap.CAMERA_BACK))
 		activeCam->Translate(-activeCam->cameraNode->getRotation().rotationToDirection().normalize() * camSpeed);
 
-	if (wm->eventReceiver->IsKeyDown(KEY_KEY_A))
+	if (wm->eventReceiver->IsKeyDown(KeyMap.CAMERA_LEFT))
 		activeCam->Translate(activeCam->cameraNode->getRotation().rotationToDirection().crossProduct(activeCam->cameraNode->getUpVector()).normalize() * camSpeed);
-	else if (wm->eventReceiver->IsKeyDown(KEY_KEY_D))
+	else if (wm->eventReceiver->IsKeyDown(KeyMap.CAMERA_RIGHT))
 		activeCam->Translate(-activeCam->cameraNode->getRotation().rotationToDirection().crossProduct(activeCam->cameraNode->getUpVector()).normalize() * camSpeed);
 
-	if (wm->eventReceiver->IsKeyDown(KEY_SPACE))
+	if (wm->eventReceiver->IsKeyDown(KeyMap.CAMERA_UP))
 		activeCam->Translate(vector3df(0, 1, 0) * camSpeed);
-	else if (wm->eventReceiver->IsKeyDown(KEY_KEY_C))
+	else if (wm->eventReceiver->IsKeyDown(KeyMap.CAMERA_DOWN))
 		activeCam->Translate(vector3df(0, -1, 0) * camSpeed);
 	
 	if (wm->eventReceiver->mouseState.shift().getLength() > 0)
@@ -192,6 +220,11 @@ void GameScene::DeselectObject()
 	}
 
 	selectedObject = nullptr;
+}
+
+Object* GameScene::GetSelectedObject()
+{
+	return selectedObject;
 }
 
 

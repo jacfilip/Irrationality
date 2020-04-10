@@ -28,6 +28,8 @@ public:
 
 	EventReceiver* eventReceiver;
 	ResourceManager resources;
+
+	const float updateFPS;
 private:
 	vector<GameScene*> scenes;
 	int activeScene;

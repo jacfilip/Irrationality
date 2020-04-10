@@ -6,7 +6,7 @@
 extern core::position2di WindowResolution;
 
 WorkManager::WorkManager(IrrlichtDevice* device, video::IVideoDriver* driver, scene::ISceneManager* smgr, EventReceiver* receiver)
-	: resources(this, smgr, driver, device)
+	: resources(this, smgr, driver, device), updateFPS(120.f)
 {
 	this->device = device;
 	this->driver = driver;
@@ -22,8 +22,11 @@ WorkManager::WorkManager(IrrlichtDevice* device, video::IVideoDriver* driver, sc
 	CreateNewScene();
 	activeScene = 0;
 
-	scenes[activeScene]->objFactory->AddCube(vector3df(0, 0, 0))->ApplyTexture(L"arz.jpg", 0);
-	scenes[activeScene]->objFactory->AddCube(vector3df(20, 0, 0))->ApplyTexture(L"arz.jpg", 0);
+	AlterWorkState(WorkState::FREE_CAMERA_FLOW);
+
+	scenes[activeScene]->objFactory->AddCube(vector3df(0, 0, 0))->ApplyTexture(L"wooden_crate.jpg", 0);
+	scenes[activeScene]->objFactory->AddCube(vector3df(20, 0, 0))->ApplyTexture(L"wooden_crate.jpg", 0);
+	scenes[activeScene]->objFactory->AddCube(vector3df(40, 0, 0))->ApplyTexture(L"wooden_crate.jpg", 0);
 }
 
 void WorkManager::Run()
@@ -57,12 +60,15 @@ void WorkManager::AlterWorkState(WorkState st)
 	{
 	case FREE_CAMERA_FLOW:
 		LockCursor(true);
+		scenes[activeScene]->GUI->SetCrosshair(Crosshairs::CROSS);
 		scenes[activeScene]->GUI->CloseToolboxWindow();
+		scenes[activeScene]->GUI->CloseObjectPropertiesWindow();
 		break;
 	case GUI_MODE:
 		LockCursor(false);
-		scenes[activeScene]->GUI->SetCrosshair(Crosshairs::CROSS);
+		scenes[activeScene]->GUI->SetCrosshair(Crosshairs::POINTER);
 		scenes[activeScene]->GUI->PopToolboxWindow();
+		scenes[activeScene]->GUI->PopObjectPropertyWindow();
 		break;
 	default:
 		break;
@@ -81,7 +87,7 @@ void WorkManager::ProcessEvents()
 	{
 	case WorkState::FREE_CAMERA_FLOW:
 		scenes[activeScene]->MoveCamera();
-		scenes[activeScene]->UpdateScene();
+		scenes[activeScene]->UpdateScene(device->getTimer()->getTime());
 		scenes[activeScene]->DrawScene();
 
 		if (eventReceiver->IsKeyPressed(KEY_TAB))
@@ -91,7 +97,7 @@ void WorkManager::ProcessEvents()
 	
 		break;
 	case WorkState::GUI_MODE:
-		if (eventReceiver->IsKeyPressed(KEY_TAB))
+		if (eventReceiver->IsKeyPressed(KeyMap.TOGGLE_GUI))
 			AlterWorkState(WorkState::FREE_CAMERA_FLOW);
 		scenes[activeScene]->DrawScene();
 		break;

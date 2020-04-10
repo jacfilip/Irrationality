@@ -14,7 +14,7 @@ CameraObject::CameraObject(scene::ICameraSceneNode* camera, const wchar_t* name,
 	cameraNode->setTarget(node->getAbsolutePosition() + forward);
 }
 
-void CameraObject::Update()
+void CameraObject::Update(u32 deltaT)
 {
 	if (scene->GetEventReceiver()->mouseState.LeftButtonDown)
 	{

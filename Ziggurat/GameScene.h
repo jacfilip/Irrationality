@@ -34,6 +34,9 @@ private:
 
 	scene::ISceneCollisionManager* colman;
 
+	u32 lastSceneUpdate;
+	u32 deltaTime;
+
 public:
 	GUImanager* GUI;
 
@@ -42,9 +45,11 @@ public:
 
 	Object* selectedObject;
 
+	int gridSnap;
+
 	GameScene(WorkManager* wm);
 
-	void UpdateScene();
+	void UpdateScene(u32 time);
 	void HandleGUIEvents(EventReceiver::GUIEvent& guiEvent);
 	gui::IGUIEnvironment* GetGUIEnvironment() const;
 
@@ -65,5 +70,6 @@ public:
 	void SelectObject(Object* obj);
 	void SelectObject(scene::ISceneNode* node);
 	void DeselectObject();
+	Object* GetSelectedObject();
 };
 

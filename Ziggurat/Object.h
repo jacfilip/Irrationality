@@ -2,6 +2,7 @@
 #include <irrlicht.h>
 #include <string>
 #include "ObjectFactory.h"
+#include "GUImanager.h"
 
 class WorkManager;
 class GameScene;
@@ -13,6 +14,8 @@ using core::vector3df;
 using scene::ISceneNode;
 
 using std::wstring;
+
+extern core::vector2di WindowResolution;
 
 enum HitType
 {
@@ -30,6 +33,7 @@ protected:
 
 	HitType hitType;
 	scene::ITriangleSelector* selector;
+	gui::IGUIWindow* wndProperties;
 
 public:
 	scene::ISceneNode* node;
@@ -47,6 +51,8 @@ public:
 	virtual void ApplyTexture(const wchar_t* path, int layer);
 	virtual video::ITexture* GetDefaultTexture();
 
-	virtual void Update() = 0;
+	virtual void Update(u32 deltaT);
+
+	virtual gui::IGUIWindow* GetPropertiesWindow();
 };
 

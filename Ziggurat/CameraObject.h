@@ -21,6 +21,6 @@ public:
 	void SetForwardVector(const vector3df& v);
 	const vector3df& GetForwardVector() const;
 
-	void Update() override;
+	void Update(u32 deltaT) override;
 };
 

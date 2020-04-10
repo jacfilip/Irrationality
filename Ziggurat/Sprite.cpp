@@ -1,6 +1,6 @@
 #include "Sprite.h"
 
-void Sprite::Update()
+void Sprite::Update(u32 deltaT)
 {
 
 }

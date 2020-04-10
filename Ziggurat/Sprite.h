@@ -4,6 +4,6 @@ class Sprite :
 	public Object
 {
 public:
-	void Update() override;
+	void Update(u32 deltaT) override;
 };
 

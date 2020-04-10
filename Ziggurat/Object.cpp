@@ -16,6 +16,40 @@ Object::Object(ISceneNode* node, const wchar_t* name, GameScene* scene, HitType 
 	node->setID(this->hitType);
 }
 
+void Object::Update(u32 deltaT)
+{
+	if (this->isSelected)
+	{
+		f32 moveSpeed = 0.1f;
+		f32 dist = moveSpeed * deltaT;
+
+		if (scene->GetEventReceiver()->IsKeyDown(KeyMap.SELECTED_X_POS))
+		{
+			this->Translate(core::vector3df(dist, 0, 0));
+		}
+		else if (scene->GetEventReceiver()->IsKeyDown(KeyMap.SELECTED_X_NEG))
+		{
+			this->Translate(core::vector3df(-dist, 0, 0));
+		}
+		else if (scene->GetEventReceiver()->IsKeyDown(KeyMap.SELECTED_Y_POS))
+		{
+			this->Translate(core::vector3df(0, dist, 0));
+		}
+		else if (scene->GetEventReceiver()->IsKeyDown(KeyMap.SELECTED_Y_NEG))
+		{
+			this->Translate(core::vector3df(0, -dist, 0));
+		}
+		else if (scene->GetEventReceiver()->IsKeyDown(KeyMap.SELECTED_Z_POS))
+		{
+			this->Translate(core::vector3df(0, 0, dist));
+		}
+		else if (scene->GetEventReceiver()->IsKeyDown(KeyMap.SELECTED_Z_NEG))
+		{
+			this->Translate(core::vector3df(0, 0, -dist));
+		}
+	}
+}
+
 void Object::Translate(const vector3df& v)
 {
 	node->setPosition(node->getPosition() + v);
@@ -31,4 +65,38 @@ void Object::ApplyTexture(const wchar_t* path, int layer = 0) {}
 video::ITexture* Object::GetDefaultTexture()
 {
 	return nullptr;
+}
+
+gui::IGUIWindow* Object::GetPropertiesWindow()
+{
+	gui::IGUIEnvironment* env = this->scene->GetGUIEnvironment();
+
+	if (wndProperties == nullptr)
+	{
+		int ystart = 30;
+		int vline = 15;
+		int voffset = 3;
+
+		wndProperties = env->addWindow(core::recti(430, 120, 630, 300), false, L"Properties", 0, GUIElements::OBJ_PROPERTY_BOX);
+		wndProperties->getCloseButton()->setVisible(false);
+
+		env->addStaticText(L"NAME:", core::recti(10, ystart, 80, ystart + vline), false, false, wndProperties);
+		env->addStaticText(L"#default#", core::recti(85, ystart, 180, ystart + vline), false, false, wndProperties, 1);
+
+		env->addStaticText(L"POSITION:", core::recti(10, ystart + (vline + voffset) * 1, 80, ystart + (vline + voffset) * 1 + vline), false, false, wndProperties);
+		env->addStaticText(L"X:", core::recti(15, ystart + (vline + voffset) * 2, 80, ystart + (vline + voffset) * 2 + vline), false, false, wndProperties);
+		env->addSpinBox(L"0", core::recti(45, ystart + (vline + voffset) * 2, 110, ystart + (vline + voffset) * 2 + vline), true, wndProperties, OBJ_PROPERTY_BOX_POS_X);
+
+		env->addStaticText(L"Y:", core::recti(15, ystart + (vline + voffset) * 3, 80, ystart + (vline + voffset) * 3 + vline), false, false, wndProperties);
+		env->addSpinBox(L"0", core::recti(45, ystart + (vline + voffset) * 3, 110, ystart + (vline + voffset) * 3 + vline), true, wndProperties, OBJ_PROPERTY_BOX_POS_Y);
+
+		env->addStaticText(L"Z:", core::recti(15, ystart + (vline + voffset) * 4, 80, ystart + (vline + voffset) * 4 + vline), false, false, wndProperties);
+		env->addSpinBox(L"0", core::recti(45, ystart + (vline + voffset) * 4, 110, ystart + (vline + voffset) * 4 + vline), true, wndProperties, OBJ_PROPERTY_BOX_POS_Z);
+
+		static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_POS_X))->setDecimalPlaces(0);
+		static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_POS_Y))->setDecimalPlaces(0);
+		static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_POS_Z))->setDecimalPlaces(0);
+	}
+
+	return wndProperties;
 }
