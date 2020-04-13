@@ -42,8 +42,11 @@ public:
 
 	Object(ISceneNode* node, const wchar_t* name, GameScene* scene, HitType hit = ID_PICKABLE);
 
-	vector3df Position() { return node->getPosition(); }
-	vector3df Rotation() { return node->getRotation(); }
+	vector3df GetPosition() { return node->getPosition(); }
+	vector3df GetRotation() { return node->getRotation(); }
+
+	void SetPosition(const vector3df& pos) { node->setPosition(pos); }
+	void SetRotation(const vector3df& rot) { node->setRotation(rot); }
 
 	virtual void Translate(const vector3df& v);
 	virtual void Rotate(const vector3df& v);
@@ -52,6 +55,8 @@ public:
 	virtual video::ITexture* GetDefaultTexture();
 
 	virtual void Update(u32 deltaT);
+
+	const wstring& GetName() { return name; }
 
 	virtual gui::IGUIWindow* GetPropertiesWindow();
 };

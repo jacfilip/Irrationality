@@ -9,12 +9,13 @@ extern class GameScene;
 
 enum GUIElements
 {
-	INSERT_WND = 1,
-	OBJ_ADD_COMBO_BOX = 2,
-	OBJ_PROPERTY_BOX = 3,
-	OBJ_PROPERTY_BOX_POS_X = 4,
-	OBJ_PROPERTY_BOX_POS_Y = 5,
-	OBJ_PROPERTY_BOX_POS_Z = 6,
+	INSERT_WND,
+	OBJ_ADD_COMBO_BOX ,
+	OBJ_PROPERTY_BOX,
+	OBJ_PROPERTY_BOX_POS_X,
+	OBJ_PROPERTY_BOX_POS_Y,
+	OBJ_PROPERTY_BOX_POS_Z,
+	TOOL_BOX_OBJ_LIST,
 };
 
 enum Crosshairs
@@ -36,6 +37,7 @@ private:
 	IGUIWindow* propertiesWindow;
 
 	IGUIComboBox* objAddComboBox;
+	IGUIListBox* objectList;
 
 public:
 	GUImanager(GameScene* gs);

@@ -46,7 +46,7 @@ void GameScene::UpdateScene(u32 time)
 void GameScene::HandleGUIEvents(EventReceiver::GUIEvent& guiEvent)
 {
 	s32 id = guiEvent.id;
-
+	
 	switch (id)
 	{
 	case GUIElements::INSERT_WND:
@@ -56,19 +56,32 @@ void GameScene::HandleGUIEvents(EventReceiver::GUIEvent& guiEvent)
 	case GUIElements::OBJ_PROPERTY_BOX_POS_X:
 		if (guiEvent.type == gui::EGUI_EVENT_TYPE::EGET_SPINBOX_CHANGED)
 		{
-
+			selectedObject->SetPosition(core::vector3df(static_cast<IGUISpinBox*>(guiEvent.caller)->getValue(),
+				selectedObject->GetPosition().Y,
+				selectedObject->GetPosition().Z));
 		}
 		break;
 	case GUIElements::OBJ_PROPERTY_BOX_POS_Y:
 		if (guiEvent.type == gui::EGUI_EVENT_TYPE::EGET_SPINBOX_CHANGED)
 		{
-
+			selectedObject->SetPosition(core::vector3df(selectedObject->GetPosition().X,
+				static_cast<IGUISpinBox*>(guiEvent.caller)->getValue(),
+				selectedObject->GetPosition().Z));
 		}
 		break;
 	case GUIElements::OBJ_PROPERTY_BOX_POS_Z:
 		if (guiEvent.type == gui::EGUI_EVENT_TYPE::EGET_SPINBOX_CHANGED)
 		{
-
+			selectedObject->SetPosition(core::vector3df(selectedObject->GetPosition().X,
+				selectedObject->GetPosition().Y,
+				static_cast<IGUISpinBox*>(guiEvent.caller)->getValue()));
+		}
+		break;
+	case GUIElements::TOOL_BOX_OBJ_LIST:
+		if (guiEvent.type == gui::EGUI_EVENT_TYPE::EGET_LISTBOX_CHANGED)
+		{
+			//todo: fill
+			GUI->CloseObjectPropertiesWindow();
 		}
 		break;
 	default:
@@ -100,7 +113,7 @@ void GameScene::DrawFloor()
 {
 	wm->driver->setTransform(video::E_TRANSFORMATION_STATE::ETS_WORLD, core::IdentityMatrix);
 
-	const vector3df& origin = activeCam->Position();
+	const vector3df& origin = activeCam->GetPosition();
 	
 	float dist = 10.f;
 	int x0 = (int)(origin.X / dist) * dist;
@@ -127,7 +140,6 @@ void GameScene::ShowDiagnostics(const wchar_t* text)
 void GameScene::AddCamera(const vector3df& pos, const vector3df& lookat)
 {
 	activeCam = new CameraObject(wm->smgr->addCameraSceneNode(nullptr, pos, lookat), L"Main Camera", this);
-	objects.push_back(activeCam);
 }
 
 EventReceiver* GameScene::GetEventReceiver()
@@ -168,13 +180,13 @@ void GameScene::MoveCamera()
 									));
 	}
 
-	wstring camPos = L"Pos: {X: " + std::to_wstring(activeCam->Position().X) + L", "
-		+ L"Y: " + std::to_wstring(activeCam->Position().Y) + L" "
-		+ L"Z: " + std::to_wstring(activeCam->Position().Z) + L"}\n";
+	wstring camPos = L"Pos: {X: " + std::to_wstring(activeCam->GetPosition().X) + L", "
+		+ L"Y: " + std::to_wstring(activeCam->GetPosition().Y) + L" "
+		+ L"Z: " + std::to_wstring(activeCam->GetPosition().Z) + L"}\n";
 
-	wstring camRot = L"Rot: {X: " + std::to_wstring(activeCam->Rotation().X) + L", "
-		+ L"Y: " + std::to_wstring(activeCam->Rotation().Y) + L" "
-		+ L"Z: " + std::to_wstring(activeCam->Rotation().Z) + L"}\n";
+	wstring camRot = L"Rot: {X: " + std::to_wstring(activeCam->GetRotation().X) + L", "
+		+ L"Y: " + std::to_wstring(activeCam->GetRotation().Y) + L" "
+		+ L"Z: " + std::to_wstring(activeCam->GetRotation().Z) + L"}\n";
 
 	ShowDiagnostics((camPos + camRot).c_str());
 }

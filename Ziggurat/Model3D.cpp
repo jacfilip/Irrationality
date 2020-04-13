@@ -24,7 +24,7 @@ void Model3D::LevelizeY()
 			bottom = edges[i].Y;
 	}
 
-	this->Translate(vector3df(0, -this->Position().Y - bottom, 0));
+	this->Translate(vector3df(0, -this->GetPosition().Y - bottom, 0));
 }
 
 Model3D::Model3D(ISceneNode* node, const wchar_t* name, GameScene* scene, vector3df pos, vector3df rot, 
@@ -57,9 +57,9 @@ gui::IGUIWindow* Model3D::GetPropertiesWindow()
 	Object::GetPropertiesWindow();
 
 	static_cast<gui::IGUIStaticText*>(wndProperties->getElementFromId(1))->setText((this->name).c_str());
-	static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_POS_X))->setValue((this->Position().X));
-	static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_POS_Y))->setValue((this->Position().Y));
-	static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_POS_Z))->setValue((this->Position().Z));
+	static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_POS_X))->setValue((this->GetPosition().X));
+	static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_POS_Y))->setValue((this->GetPosition().Y));
+	static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_POS_Z))->setValue((this->GetPosition().Z));
 
 	return wndProperties;
 }

@@ -48,10 +48,19 @@ void GUImanager::PopToolboxWindow()
 		this->objAddComboBox->addItem(L"Cube");
 		this->objAddComboBox->addItem(L"Plane");
 		this->toolboxWindow->getCloseButton()->setVisible(false);
+
+		scene->GetGUIEnvironment()->addStaticText(L"Objects:", core::recti(10, 70, 150, 85), false, false, toolboxWindow);
+		this->objectList = scene->GetGUIEnvironment()->addListBox(core::recti(10, 90, 150, 350), toolboxWindow, GUIElements::TOOL_BOX_OBJ_LIST);
+
+		this->objectList->clear();
+		for (auto obj : scene->objects)
+			this->objectList->addItem(obj->GetName().c_str());
 	}
 	else
 	{
 		this->toolboxWindow->setVisible(true);
+		for (auto e : toolboxWindow->getChildren())
+			e->setEnabled(true);
 	}
 }
 
@@ -71,7 +80,11 @@ void GUImanager::PopObjectPropertyWindow()
 	propertiesWindow = obj->GetPropertiesWindow();
 
 	if (propertiesWindow != nullptr)
+	{
 		propertiesWindow->setVisible(true);
+		for (auto e : propertiesWindow->getChildren())
+			e->setEnabled(true);
+	}
 }
 
 void GUImanager::CloseToolboxWindow()
@@ -79,6 +92,8 @@ void GUImanager::CloseToolboxWindow()
 	if (toolboxWindow != nullptr)
 	{
 		this->toolboxWindow->setVisible(false);
+		for (auto e : toolboxWindow->getChildren())
+			e->setEnabled(false);
 	}
 }
 
@@ -86,6 +101,8 @@ void GUImanager::CloseObjectPropertiesWindow()
 {
 	if (propertiesWindow != nullptr)
 	{
-		propertiesWindow->setVisible(false);
+		this->propertiesWindow->setVisible(false);
+		for (auto e : propertiesWindow->getChildren())
+			e->setEnabled(false);
 	}
 }
