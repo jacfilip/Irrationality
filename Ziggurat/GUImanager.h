@@ -11,10 +11,17 @@ enum GUIElements
 {
 	INSERT_WND,
 	OBJ_ADD_COMBO_BOX ,
+
 	OBJ_PROPERTY_BOX,
 	OBJ_PROPERTY_BOX_POS_X,
 	OBJ_PROPERTY_BOX_POS_Y,
 	OBJ_PROPERTY_BOX_POS_Z,
+	OBJ_PROPERTY_BOX_ROT_X,
+	OBJ_PROPERTY_BOX_ROT_Y,
+	OBJ_PROPERTY_BOX_ROT_Z,
+	OBJ_PROPERTY_BOX_REMOVE,
+	OBJ_PROPERTY_BOX_REMOVE_CONFIRM,
+
 	TOOL_BOX_OBJ_LIST,
 };
 
@@ -45,6 +52,8 @@ public:
 	void SetCrosshair(Crosshairs type);
 	
 	void PopToolboxWindow();
+	void RefreshToolBoxWindow();
+
 	void PopInfoBox(const wchar_t* message);
 	void PopObjectPropertyWindow();
 

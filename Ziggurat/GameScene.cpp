@@ -77,13 +77,55 @@ void GameScene::HandleGUIEvents(EventReceiver::GUIEvent& guiEvent)
 				static_cast<IGUISpinBox*>(guiEvent.caller)->getValue()));
 		}
 		break;
+	case GUIElements::OBJ_PROPERTY_BOX_ROT_X:
+		if (guiEvent.type == gui::EGUI_EVENT_TYPE::EGET_SPINBOX_CHANGED)
+		{
+			selectedObject->SetRotation(core::vector3df(static_cast<IGUISpinBox*>(guiEvent.caller)->getValue(),
+				selectedObject->GetRotation().Y,
+				selectedObject->GetRotation().Z));
+		}
+		break;
+	case GUIElements::OBJ_PROPERTY_BOX_ROT_Y:
+		if (guiEvent.type == gui::EGUI_EVENT_TYPE::EGET_SPINBOX_CHANGED)
+		{
+			selectedObject->SetRotation(core::vector3df(selectedObject->GetRotation().X,
+				static_cast<IGUISpinBox*>(guiEvent.caller)->getValue(),
+				selectedObject->GetRotation().Z));
+		}
+		break;
+	case GUIElements::OBJ_PROPERTY_BOX_ROT_Z:
+		if (guiEvent.type == gui::EGUI_EVENT_TYPE::EGET_SPINBOX_CHANGED)
+		{
+			selectedObject->SetRotation(core::vector3df(selectedObject->GetRotation().X,
+				selectedObject->GetRotation().Y,
+				static_cast<IGUISpinBox*>(guiEvent.caller)->getValue()));
+		}
+		break;
 	case GUIElements::TOOL_BOX_OBJ_LIST:
 		if (guiEvent.type == gui::EGUI_EVENT_TYPE::EGET_LISTBOX_CHANGED)
 		{
-			//todo: fill
 			GUI->CloseObjectPropertiesWindow();
+			gui::IGUIListBox* list = dynamic_cast<gui::IGUIListBox*>(guiEvent.caller);
+			wstring name = list->getListItem(list->getSelected());
+			Object* sel = FindObject(name);
+			
+			if (sel)
+			{
+				SelectObject(sel);
+				GUI->PopObjectPropertyWindow();
+			}
 		}
 		break;
+	case GUIElements::OBJ_PROPERTY_BOX_REMOVE:
+		if (guiEvent.type == gui::EGUI_EVENT_TYPE::EGET_BUTTON_CLICKED)
+			wm->device->getGUIEnvironment()->addMessageBox(L"Removing object.", L"Are you sure you want to remove this object?", true, EMBF_YES | EMBF_NO, 0, OBJ_PROPERTY_BOX_REMOVE_CONFIRM);
+		break;
+	case GUIElements::OBJ_PROPERTY_BOX_REMOVE_CONFIRM:
+		if (guiEvent.type == EGET_MESSAGEBOX_YES && selectedObject)
+		{
+			selectedObject->Destroy();
+			GUI->RefreshToolBoxWindow();
+		}
 	default:
 		break;
 	}
@@ -237,6 +279,27 @@ void GameScene::DeselectObject()
 Object* GameScene::GetSelectedObject()
 {
 	return selectedObject;
+}
+
+Object* GameScene::FindObject(wstring name)
+{
+	for (Object* obj : objects)
+		if (obj->GetName() == name)
+			return obj;
+
+	return nullptr;
+}
+
+void GameScene::DestroyObject(Object* obj)
+{
+	for (auto i = objects.begin(); i != objects.end(); i++)
+	{
+		if (*i == obj)
+		{
+			objects.erase(i);
+			return;
+		}
+	}
 }
 
 

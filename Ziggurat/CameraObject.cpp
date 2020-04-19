@@ -65,3 +65,7 @@ const vector3df& CameraObject::GetForwardVector() const
 	return forward;
 }
 
+void CameraObject::Destroy()
+{
+	scene->GetWorkManager()->device->getGUIEnvironment()->addMessageBox(L"Failed!", L"Main camera cannot be removed.");
+}

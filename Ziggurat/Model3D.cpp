@@ -52,15 +52,26 @@ video::ITexture* Model3D::GetDefaultTexture()
 	return defaultTexture;
 }
 
-gui::IGUIWindow* Model3D::GetPropertiesWindow()
+gui::IGUIWindow* Model3D::CreatePropertiesWindow()
 {
-	Object::GetPropertiesWindow();
+	Object::CreatePropertiesWindow();
+
+	wndProperties->setText(L"Properties - Model 3D");
 
 	static_cast<gui::IGUIStaticText*>(wndProperties->getElementFromId(1))->setText((this->name).c_str());
-	static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_POS_X))->setValue((this->GetPosition().X));
-	static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_POS_Y))->setValue((this->GetPosition().Y));
-	static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_POS_Z))->setValue((this->GetPosition().Z));
+
+	static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_POS_X))->setValue(this->GetPosition().X);
+	static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_POS_Y))->setValue(this->GetPosition().Y);
+	static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_POS_Z))->setValue(this->GetPosition().Z);
+
+	static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_ROT_X))->setValue(this->GetRotation().X);
+	static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_ROT_Y))->setValue(this->GetRotation().Y);
+	static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_ROT_Z))->setValue(this->GetRotation().Z);
 
 	return wndProperties;
 }
 
+void Model3D::Destroy()
+{
+	Object::Destroy();
+}

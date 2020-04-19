@@ -70,6 +70,9 @@ public:
 	void SelectObject(Object* obj);
 	void SelectObject(scene::ISceneNode* node);
 	void DeselectObject();
+
 	Object* GetSelectedObject();
+	Object* FindObject(wstring name);
+	void DestroyObject(Object* obj);
 };
 

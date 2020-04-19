@@ -33,7 +33,6 @@ Object* ObjectFactory::AddCube(vector3df pos, vector3df rot, float size, const w
 		wm->GetActiveScene()->GUI->PopInfoBox(buf.c_str());
 		return nullptr;
 	}
-
 	scene::ISceneNode* cube = wm->smgr->addCubeSceneNode(10, nullptr, 0, pos);
 	cube->getMaterial(0).DiffuseColor.set(255, 255, 255, 255);
 	cube->getMaterial(0).MaterialType = video::EMT_SOLID_2_LAYER;

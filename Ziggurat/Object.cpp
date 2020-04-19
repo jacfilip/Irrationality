@@ -67,7 +67,7 @@ video::ITexture* Object::GetDefaultTexture()
 	return nullptr;
 }
 
-gui::IGUIWindow* Object::GetPropertiesWindow()
+gui::IGUIWindow* Object::CreatePropertiesWindow()
 {
 	gui::IGUIEnvironment* env = this->scene->GetGUIEnvironment();
 
@@ -75,28 +75,47 @@ gui::IGUIWindow* Object::GetPropertiesWindow()
 	{
 		int ystart = 30;
 		int vline = 15;
-		int voffset = 3;
+		int voffset = 3, hoffset = 110;
 
-		wndProperties = env->addWindow(core::recti(430, 120, 630, 300), false, L"Properties", 0, GUIElements::OBJ_PROPERTY_BOX);
+		wndProperties = env->addWindow(core::recti(390, 120, 620, 300), false, L"Properties", 0, GUIElements::OBJ_PROPERTY_BOX);
 		wndProperties->getCloseButton()->setVisible(false);
 
 		env->addStaticText(L"NAME:", core::recti(10, ystart, 80, ystart + vline), false, false, wndProperties);
-		env->addStaticText(L"#default#", core::recti(85, ystart, 180, ystart + vline), false, false, wndProperties, 1);
+		env->addStaticText(this->name.c_str(), core::recti(85, ystart, 180, ystart + vline), false, false, wndProperties, 1);
 
 		env->addStaticText(L"POSITION:", core::recti(10, ystart + (vline + voffset) * 1, 80, ystart + (vline + voffset) * 1 + vline), false, false, wndProperties);
 		env->addStaticText(L"X:", core::recti(15, ystart + (vline + voffset) * 2, 80, ystart + (vline + voffset) * 2 + vline), false, false, wndProperties);
 		env->addSpinBox(L"0", core::recti(45, ystart + (vline + voffset) * 2, 110, ystart + (vline + voffset) * 2 + vline), true, wndProperties, OBJ_PROPERTY_BOX_POS_X);
-
 		env->addStaticText(L"Y:", core::recti(15, ystart + (vline + voffset) * 3, 80, ystart + (vline + voffset) * 3 + vline), false, false, wndProperties);
 		env->addSpinBox(L"0", core::recti(45, ystart + (vline + voffset) * 3, 110, ystart + (vline + voffset) * 3 + vline), true, wndProperties, OBJ_PROPERTY_BOX_POS_Y);
-
 		env->addStaticText(L"Z:", core::recti(15, ystart + (vline + voffset) * 4, 80, ystart + (vline + voffset) * 4 + vline), false, false, wndProperties);
 		env->addSpinBox(L"0", core::recti(45, ystart + (vline + voffset) * 4, 110, ystart + (vline + voffset) * 4 + vline), true, wndProperties, OBJ_PROPERTY_BOX_POS_Z);
+
+		env->addStaticText(L"ROTATION:", core::recti(10 + hoffset, ystart + (vline + voffset) * 1, 80 + hoffset, ystart + (vline + voffset) * 1 + vline), false, false, wndProperties);
+		env->addStaticText(L"X:", core::recti(15 + hoffset, ystart + (vline + voffset) * 2, 80 + hoffset, ystart + (vline + voffset) * 2 + vline), false, false, wndProperties);
+		env->addSpinBox(L"0", core::recti(45 + hoffset, ystart + (vline + voffset) * 2, 110 + hoffset, ystart + (vline + voffset) * 2 + vline), true, wndProperties, OBJ_PROPERTY_BOX_ROT_X);
+		env->addStaticText(L"Y:", core::recti(15 + hoffset, ystart + (vline + voffset) * 3, 80 + hoffset, ystart + (vline + voffset) * 3 + vline), false, false, wndProperties);
+		env->addSpinBox(L"0", core::recti(45 + hoffset, ystart + (vline + voffset) * 3, 110 + hoffset, ystart + (vline + voffset) * 3 + vline), true, wndProperties, OBJ_PROPERTY_BOX_ROT_Y);
+		env->addStaticText(L"Z:", core::recti(15 + hoffset, ystart + (vline + voffset) * 4, 80 + hoffset, ystart + (vline + voffset) * 4 + vline), false, false, wndProperties);
+		env->addSpinBox(L"0", core::recti(45 + hoffset, ystart + (vline + voffset) * 4, 110 + hoffset, ystart + (vline + voffset) * 4 + vline), true, wndProperties, OBJ_PROPERTY_BOX_ROT_Z);
 
 		static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_POS_X))->setDecimalPlaces(0);
 		static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_POS_Y))->setDecimalPlaces(0);
 		static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_POS_Z))->setDecimalPlaces(0);
+
+		static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_ROT_X))->setDecimalPlaces(0);
+		static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_ROT_Y))->setDecimalPlaces(0);
+		static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_ROT_Z))->setDecimalPlaces(0);
+
+		env->addButton(core::recti(120, ystart + (vline + voffset) * 7, 120 + 100, ystart + (vline + voffset) * 7 + 20), wndProperties, OBJ_PROPERTY_BOX_REMOVE, L"Remove");
 	}
 
 	return wndProperties;
+}
+
+void Object::Destroy()
+{
+	scene->DestroyObject(this);
+	scene->DeselectObject();
+	this->node->remove();
 }

@@ -22,5 +22,6 @@ public:
 	const vector3df& GetForwardVector() const;
 
 	void Update(u32 deltaT) override;
+	void Destroy() override;
 };
 

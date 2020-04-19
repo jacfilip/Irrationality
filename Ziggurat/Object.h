@@ -58,6 +58,7 @@ public:
 
 	const wstring& GetName() { return name; }
 
-	virtual gui::IGUIWindow* GetPropertiesWindow();
+	virtual gui::IGUIWindow* CreatePropertiesWindow();
+	virtual void Destroy();
 };
 

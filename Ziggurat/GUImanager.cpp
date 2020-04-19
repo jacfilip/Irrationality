@@ -50,7 +50,7 @@ void GUImanager::PopToolboxWindow()
 		this->toolboxWindow->getCloseButton()->setVisible(false);
 
 		scene->GetGUIEnvironment()->addStaticText(L"Objects:", core::recti(10, 70, 150, 85), false, false, toolboxWindow);
-		this->objectList = scene->GetGUIEnvironment()->addListBox(core::recti(10, 90, 150, 350), toolboxWindow, GUIElements::TOOL_BOX_OBJ_LIST);
+		this->objectList = scene->GetGUIEnvironment()->addListBox(core::recti(10, 90, 150, 350), toolboxWindow, GUIElements::TOOL_BOX_OBJ_LIST, true);
 
 		this->objectList->clear();
 		for (auto obj : scene->objects)
@@ -61,6 +61,16 @@ void GUImanager::PopToolboxWindow()
 		this->toolboxWindow->setVisible(true);
 		for (auto e : toolboxWindow->getChildren())
 			e->setEnabled(true);
+	}
+}
+
+void GUImanager::RefreshToolBoxWindow()
+{
+	if (this->toolboxWindow != nullptr)
+	{
+		this->objectList->clear();
+		for (auto obj : scene->objects)
+			this->objectList->addItem(obj->GetName().c_str());
 	}
 }
 
@@ -77,7 +87,7 @@ void GUImanager::PopObjectPropertyWindow()
 
 	CloseObjectPropertiesWindow();
 
-	propertiesWindow = obj->GetPropertiesWindow();
+	propertiesWindow = obj->CreatePropertiesWindow();
 
 	if (propertiesWindow != nullptr)
 	{

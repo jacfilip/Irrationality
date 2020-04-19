@@ -20,7 +20,8 @@ public:
 	void Update(u32 deltaT) override;
 
 	virtual void ApplyTexture(const wchar_t* path, int layer = 0) override;
-	virtual gui::IGUIWindow* GetPropertiesWindow() override;
+	virtual gui::IGUIWindow* CreatePropertiesWindow() override;
 	virtual video::ITexture* GetDefaultTexture() override;
+	virtual void Destroy() override;
 };
 
