@@ -66,7 +66,7 @@ void GUImanager::PopToolboxWindow()
 
 void GUImanager::RefreshToolBoxWindow()
 {
-	if (this->toolboxWindow != nullptr)
+	if (toolboxWindow)
 	{
 		this->objectList->clear();
 		for (auto obj : scene->objects)
@@ -89,7 +89,7 @@ void GUImanager::PopObjectPropertyWindow()
 
 	propertiesWindow = obj->CreatePropertiesWindow();
 
-	if (propertiesWindow != nullptr)
+	if (propertiesWindow)
 	{
 		propertiesWindow->setVisible(true);
 		for (auto e : propertiesWindow->getChildren())
@@ -99,7 +99,7 @@ void GUImanager::PopObjectPropertyWindow()
 
 void GUImanager::CloseToolboxWindow()
 {
-	if (toolboxWindow != nullptr)
+	if (toolboxWindow)
 	{
 		this->toolboxWindow->setVisible(false);
 		for (auto e : toolboxWindow->getChildren())
@@ -109,10 +109,29 @@ void GUImanager::CloseToolboxWindow()
 
 void GUImanager::CloseObjectPropertiesWindow()
 {
-	if (propertiesWindow != nullptr)
+	if (propertiesWindow)
 	{
 		this->propertiesWindow->setVisible(false);
 		for (auto e : propertiesWindow->getChildren())
 			e->setEnabled(false);
 	}
 }
+
+void GUImanager::PopToolbar()
+{
+	if (menu == nullptr)
+	{
+		menu = scene->GetGUIEnvironment()->addMenu(nullptr, MENUSTRIP);
+		menu->addItem(L"File", MENUSTRIP_FILE, true, true);
+		menu->getSubMenu(0)->addItem(L"Exit", MENUSTRIP_FILE_EXIT);
+	}
+	else
+		menu->setVisible(true);
+}
+
+void GUImanager::CloseToolbar()
+{
+	if (menu)
+		menu->setVisible(false);
+}
+

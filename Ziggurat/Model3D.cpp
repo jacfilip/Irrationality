@@ -43,8 +43,10 @@ Model3D::Model3D(ISceneNode* node, const wchar_t* name, GameScene* scene, vector
 
 void Model3D::ApplyTexture(const wchar_t* path, int layer)
 {
-	this->defaultTexture = this->scene->GetWorkManager()->driver->getTexture(path);
-	this->node->setMaterialTexture(layer, defaultTexture);
+	this->selectedTexture = this->scene->GetWorkManager()->driver->getTexture(path);
+	
+	if(selectedTexture)
+		this->node->setMaterialTexture(layer, selectedTexture);
 }
 
 video::ITexture* Model3D::GetDefaultTexture()
@@ -67,6 +69,8 @@ gui::IGUIWindow* Model3D::CreatePropertiesWindow()
 	static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_ROT_X))->setValue(this->GetRotation().X);
 	static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_ROT_Y))->setValue(this->GetRotation().Y);
 	static_cast<gui::IGUISpinBox*>(wndProperties->getElementFromId(OBJ_PROPERTY_BOX_ROT_Z))->setValue(this->GetRotation().Z);
+
+
 
 	return wndProperties;
 }

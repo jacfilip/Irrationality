@@ -34,6 +34,7 @@ protected:
 	HitType hitType;
 	scene::ITriangleSelector* selector;
 	gui::IGUIWindow* wndProperties;
+	video::ITexture* mainTexture;
 
 public:
 	scene::ISceneNode* node;

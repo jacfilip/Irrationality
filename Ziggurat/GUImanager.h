@@ -11,7 +11,11 @@ enum GUIElements
 {
 	INSERT_WND,
 	OBJ_ADD_COMBO_BOX ,
-
+	
+	MENUSTRIP,
+	MENUSTRIP_FILE,
+	MENUSTRIP_FILE_EXIT,
+	
 	OBJ_PROPERTY_BOX,
 	OBJ_PROPERTY_BOX_POS_X,
 	OBJ_PROPERTY_BOX_POS_Y,
@@ -21,6 +25,10 @@ enum GUIElements
 	OBJ_PROPERTY_BOX_ROT_Z,
 	OBJ_PROPERTY_BOX_REMOVE,
 	OBJ_PROPERTY_BOX_REMOVE_CONFIRM,
+	
+	OBJ_PROPERTY_BOX_TEXTURE_SET,
+	OBJ_PROPERTY_BOX_TEXTURE_OPEN_FILE_DIALOG,
+	OBJ_PROPERTY_BOX_TEXTURE_NAME,
 
 	TOOL_BOX_OBJ_LIST,
 };
@@ -45,6 +53,7 @@ private:
 
 	IGUIComboBox* objAddComboBox;
 	IGUIListBox* objectList;
+	IGUIContextMenu* menu;
 
 public:
 	GUImanager(GameScene* gs);
@@ -56,8 +65,10 @@ public:
 
 	void PopInfoBox(const wchar_t* message);
 	void PopObjectPropertyWindow();
+	void PopToolbar();
 
 	void CloseToolboxWindow();
 	void CloseObjectPropertiesWindow();
+	void CloseToolbar();
 };
 

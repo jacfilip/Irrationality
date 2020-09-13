@@ -126,8 +126,21 @@ void GameScene::HandleGUIEvents(EventReceiver::GUIEvent& guiEvent)
 			selectedObject->Destroy();
 			GUI->RefreshToolBoxWindow();
 		}
+
+	case GUIElements::OBJ_PROPERTY_BOX_TEXTURE_SET:
+		if (guiEvent.type == gui::EGUI_EVENT_TYPE::EGET_BUTTON_CLICKED)
+		{
+			textureSelectFileDialog = wm->device->getGUIEnvironment()->addFileOpenDialog(L"Select texture", true, 0, GUIElements::OBJ_PROPERTY_BOX_TEXTURE_OPEN_FILE_DIALOG);
+		}
+			break;
 	default:
 		break;
+	}
+
+	if (guiEvent.type == gui::EGUI_EVENT_TYPE::EGET_FILE_SELECTED)
+	{
+		if (textureSelectFileDialog)
+			selectedObject->ApplyTexture(textureSelectFileDialog->getFileName(), 0);
 	}
 }
 

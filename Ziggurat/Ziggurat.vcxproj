@@ -180,6 +180,7 @@
     <ClInclude Include="WorkManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\..\Desktop\steel.jpg" />
     <Image Include="resources\textures\crosshair-simple.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

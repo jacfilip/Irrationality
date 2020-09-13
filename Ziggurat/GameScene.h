@@ -32,6 +32,8 @@ private:
 
 	gui::IGUIEnvironment* guiEnv;
 
+	gui::IGUIFileOpenDialog* textureSelectFileDialog;
+
 	scene::ISceneCollisionManager* colman;
 
 	u32 lastSceneUpdate;

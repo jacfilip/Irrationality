@@ -9,7 +9,7 @@ class Model3D :
 {
 protected:
 	ObjectType type;
-	video::ITexture* defaultTexture;
+	video::ITexture* defaultTexture, *selectedTexture;
 
 	void LevelizeY();
 

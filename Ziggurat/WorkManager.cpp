@@ -27,6 +27,7 @@ WorkManager::WorkManager(IrrlichtDevice* device, video::IVideoDriver* driver, sc
 	scenes[activeScene]->objFactory->AddCube(vector3df(0, 0, 0))->ApplyTexture(L"wooden_crate.jpg", 0);
 	scenes[activeScene]->objFactory->AddCube(vector3df(20, 0, 0))->ApplyTexture(L"wooden_crate.jpg", 0);
 	scenes[activeScene]->objFactory->AddCube(vector3df(40, 0, 0))->ApplyTexture(L"wooden_crate.jpg", 0);
+	scenes[activeScene]->objFactory->AddSprite(vector3df(60, 0, 0), driver->getTexture(L"wooden_crate.jpg"));
 }
 
 void WorkManager::Run()
@@ -63,12 +64,14 @@ void WorkManager::AlterWorkState(WorkState st)
 		scenes[activeScene]->GUI->SetCrosshair(Crosshairs::CROSS);
 		scenes[activeScene]->GUI->CloseToolboxWindow();
 		scenes[activeScene]->GUI->CloseObjectPropertiesWindow();
+		scenes[activeScene]->GUI->CloseToolbar();
 		break;
 	case GUI_MODE:
 		LockCursor(false);
 		scenes[activeScene]->GUI->SetCrosshair(Crosshairs::POINTER);
 		scenes[activeScene]->GUI->PopToolboxWindow();
 		scenes[activeScene]->GUI->PopObjectPropertyWindow();
+		scenes[activeScene]->GUI->PopToolbar();
 		break;
 	default:
 		break;
@@ -94,6 +97,14 @@ void WorkManager::ProcessEvents()
 			AlterWorkState(WorkState::GUI_MODE);
 		else if (eventReceiver->IsKeyPressed(EKEY_CODE::KEY_ESCAPE))
 			scenes[activeScene]->DeselectObject();
+		else if (eventReceiver->IsKeyDown(EKEY_CODE::KEY_DELETE) && scenes[activeScene]->selectedObject)
+		{
+			scenes[activeScene]->selectedObject->Destroy();
+			scenes[activeScene]->GUI->RefreshToolBoxWindow();
+			//LockCursor(true);
+			//device->getGUIEnvironment()->addMessageBox(L"Removing object.", L"Are you sure you want to remove this object?", true, EMBF_YES | EMBF_NO, 0, OBJ_PROPERTY_BOX_REMOVE_CONFIRM);
+			//LockCursor(false);
+		}
 	
 		break;
 	case WorkState::GUI_MODE:
