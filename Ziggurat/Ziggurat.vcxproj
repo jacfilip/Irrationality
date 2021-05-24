@@ -22,7 +22,7 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{6EBC0B96-7D3F-43D8-A978-E5438645E901}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Ziggurat</RootNamespace>
+    <RootNamespace>IRRationality</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>IRRationality</ProjectName>
   </PropertyGroup>

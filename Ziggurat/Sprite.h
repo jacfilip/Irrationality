@@ -8,6 +8,6 @@ public:
 		video::ITexture* texture, ObjectType type, GameScene* scene, HitType hitType = HitType(ID_PICKABLE | ID_HIGHLIGHTABLE));
 	void Update(u32 deltaT) override;
 
-	bool IsLockedZ;
+	bool IsLockedZ; //locks billboarding around Z axis
 };
 
