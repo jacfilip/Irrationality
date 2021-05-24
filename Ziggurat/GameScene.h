@@ -60,6 +60,8 @@ public:
 	void ShowDiagnostics(const wchar_t* text);
 	
 	void AddCamera(const vector3df& pos, const vector3df& lookat);
+	core::vector3df GetCameraPosition() const;
+	core::vector3df GetCameraLookaAt() const;
 
 	EventReceiver* GetEventReceiver();
 	WorkManager* GetWorkManager();

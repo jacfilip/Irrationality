@@ -197,6 +197,16 @@ void GameScene::AddCamera(const vector3df& pos, const vector3df& lookat)
 	activeCam = new CameraObject(wm->smgr->addCameraSceneNode(nullptr, pos, lookat), L"Main Camera", this);
 }
 
+core::vector3df GameScene::GetCameraPosition() const
+{
+	return this->activeCam->GetPosition();
+}
+
+core::vector3df GameScene::GetCameraLookaAt() const
+{
+	return activeCam->GetForwardVector();
+}
+
 EventReceiver* GameScene::GetEventReceiver()
 {
 	return wm->eventReceiver;
