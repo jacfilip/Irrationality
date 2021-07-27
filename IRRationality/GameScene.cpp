@@ -130,7 +130,7 @@ void GameScene::HandleGUIEvents(EventReceiver::GUIEvent& guiEvent)
 	case GUIElements::OBJ_PROPERTY_BOX_TEXTURE_SET:
 		if (guiEvent.type == gui::EGUI_EVENT_TYPE::EGET_BUTTON_CLICKED)
 		{
-			textureSelectFileDialog = wm->device->getGUIEnvironment()->addFileOpenDialog(L"Select texture", true, 0, GUIElements::OBJ_PROPERTY_BOX_TEXTURE_OPEN_FILE_DIALOG);
+			textureSelectFileDialog = wm->device->getGUIEnvironment()->addFileOpenDialog(L"Select texture", true, 0, GUIElements::OBJ_PROPERTY_BOX_TEXTURE_OPEN_FILE_DIALOG, true, const_cast<c8*>(textureStartDir));
 		}
 			break;
 	default:
@@ -140,7 +140,14 @@ void GameScene::HandleGUIEvents(EventReceiver::GUIEvent& guiEvent)
 	if (guiEvent.type == gui::EGUI_EVENT_TYPE::EGET_FILE_SELECTED)
 	{
 		if (textureSelectFileDialog)
+		{
 			selectedObject->ApplyTexture(textureSelectFileDialog->getFileName(), 0);
+
+			IGUIElement* root = wm->device->getGUIEnvironment()->getRootGUIElement();
+			IGUIStaticText* tx = dynamic_cast<IGUIStaticText*>(root->getElementFromId(OBJ_PROPERTY_BOX_TEXTURE_NAME, true));
+			tx->setText(selectedObject->GetTextureName().c_str());
+
+		}
 	}
 }
 

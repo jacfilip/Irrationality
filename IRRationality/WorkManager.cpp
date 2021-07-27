@@ -28,6 +28,13 @@ WorkManager::WorkManager(IrrlichtDevice* device, video::IVideoDriver* driver, sc
 	scenes[activeScene]->objFactory->AddCube(vector3df(20, 0, 0))->ApplyTexture(L"wooden_crate.jpg", 0);
 	scenes[activeScene]->objFactory->AddCube(vector3df(40, 0, 0))->ApplyTexture(L"wooden_crate.jpg", 0);
 	scenes[activeScene]->objFactory->AddSprite(vector3df(60, 0, 0), driver->getTexture(L"wooden_crate.jpg"));
+
+	scenes[activeScene]->objFactory->AddPoly(std::vector<vector3df> 
+	{	vector3df(0, 0, 0), 
+		vector3df(100, 0, 0), 
+		vector3df(0, 0, 100), 
+		vector3df(10, 50, 110)}, driver->getTexture(L"wooden_crate.jpg"),
+		scene::EPT_TRIANGLE_STRIP)->ApplyTexture(L"wooden_crate.jpg", 0);
 }
 
 void WorkManager::Run()

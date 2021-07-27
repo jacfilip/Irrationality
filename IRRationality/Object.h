@@ -36,6 +36,10 @@ protected:
 	gui::IGUIWindow* wndProperties;
 	video::ITexture* mainTexture;
 
+	video::ITexture* defaultTexture, * selectedTexture;
+
+	wstring textureName;
+
 public:
 	scene::ISceneNode* node;
 
@@ -54,6 +58,7 @@ public:
 
 	virtual void ApplyTexture(const wchar_t* path, int layer);
 	virtual video::ITexture* GetDefaultTexture();
+	wstring GetTextureName() { return textureName; }
 
 	virtual void Update(u32 deltaT);
 
@@ -61,5 +66,6 @@ public:
 
 	virtual gui::IGUIWindow* CreatePropertiesWindow();
 	virtual void Destroy();
+
 };
 

@@ -41,14 +41,6 @@ Model3D::Model3D(ISceneNode* node, const wchar_t* name, GameScene* scene, vector
 	this->selector->drop();
 }
 
-void Model3D::ApplyTexture(const wchar_t* path, int layer)
-{
-	this->selectedTexture = this->scene->GetWorkManager()->driver->getTexture(path);
-	
-	if(selectedTexture)
-		this->node->setMaterialTexture(layer, selectedTexture);
-}
-
 video::ITexture* Model3D::GetDefaultTexture()
 {
 	return defaultTexture;

@@ -32,6 +32,7 @@ private:
 
 	gui::IGUIEnvironment* guiEnv;
 
+	const char* textureStartDir = "C:\\Users\\jacekf\\source\\repos\\Ziggurat\\Ziggurat\\resources\\textures";
 	gui::IGUIFileOpenDialog* textureSelectFileDialog;
 
 	scene::ISceneCollisionManager* colman;

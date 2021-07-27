@@ -60,7 +60,23 @@ void Object::Rotate(const vector3df& v)
 	node->setRotation(node->getRotation() + v);
 }
 
-void Object::ApplyTexture(const wchar_t* path, int layer = 0) {}
+void Object::ApplyTexture(const wchar_t* path, int layer = 0) 
+{
+	this->selectedTexture = this->scene->GetWorkManager()->driver->getTexture(path);
+
+	if (selectedTexture)
+	{
+		this->node->setMaterialTexture(layer, selectedTexture);
+
+		int pos = wstring(path).find_last_of('/');
+		int len = wstring(path).length();
+
+		if (pos > 0 && len > 0)
+			textureName = wstring(path).substr(pos + 1, len);
+		else
+			textureName = path;
+	}
+}
  
 video::ITexture* Object::GetDefaultTexture()
 {
@@ -111,7 +127,7 @@ gui::IGUIWindow* Object::CreatePropertiesWindow()
 
 		//TEXTURE SELECT
 		env->addButton(core::recti(10, ystart + (vline + voffset) * 5, 35, ystart + (vline + voffset) * 5 + vline), wndProperties, OBJ_PROPERTY_BOX_TEXTURE_SET, L"Set", L"Select texture for this object");
-		env->addStaticText(L"Texture:", core::recti(40, ystart + (vline + voffset) * 5, 80 + hoffset, ystart + (vline + voffset) * 5 + vline), false, false, wndProperties, false);
+		env->addStaticText((wstring(L"Texture:") + GetTextureName()).c_str(), core::recti(40, ystart + (vline + voffset) * 5, 80 + hoffset, ystart + (vline + voffset) * 5 + vline), false, true, wndProperties, OBJ_PROPERTY_BOX_TEXTURE_NAME);
 
 		env->addButton(core::recti(120, ystart + (vline + voffset) * 7, 120 + 100, ystart + (vline + voffset) * 7 + 20), wndProperties, OBJ_PROPERTY_BOX_REMOVE, L"Remove");
 	}

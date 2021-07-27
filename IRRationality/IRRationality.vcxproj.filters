@@ -48,6 +48,9 @@
     <ClCompile Include="IRRationality.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Poly.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WorkManager.h">
@@ -78,6 +81,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ObjectFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Poly.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
